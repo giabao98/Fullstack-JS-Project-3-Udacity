@@ -22,6 +22,6 @@ export class ConfirmComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigateByUrl(NAVIGATES.ITEM_LIST);
+    this.router.navigateByUrl(NAVIGATES.ITEMS);
   }
 }

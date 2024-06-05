@@ -8,7 +8,7 @@ import { ConfirmComponent } from './modules/confirm/confirm.component';
 
 const routes: Routes = [
   {
-    path: NAVIGATES.ITEM_LIST,
+    path: NAVIGATES.ITEMS,
     component: ItemListComponent,
   },
   {

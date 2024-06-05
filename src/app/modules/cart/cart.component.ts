@@ -13,12 +13,13 @@ import { NAVIGATES } from 'src/app/utils/constants';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  storeSubscription!: Subscription;
-  cartItems: CartItem[] = [];
-  total: number = 0;
-  creditCartNumber: string = '';
+  private storeSubscription!: Subscription;
+  public cartItems: CartItem[] = [];
+  public total: number = 0;
+  public creditCartNumber: string = '';
+  public isClickSubmit: boolean = false;
 
-  cartForm = new FormGroup({
+  public cartForm = new FormGroup({
     fullName: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
@@ -29,7 +30,16 @@ export class CartComponent implements OnInit {
     ]),
   });
 
-  isClickSubmit: boolean = false;
+  constructor(
+    private readonly commonService: CommonService,
+    private readonly cartService: CartService,
+    private readonly router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.cartItems = this.cartService.getCartItem();
+    this.calculateTotal();
+  }
 
   get fullName() {
     return this.cartForm.get('fullName');
@@ -39,62 +49,34 @@ export class CartComponent implements OnInit {
     return this.cartForm.get('address');
   }
 
-  get creditCart() {
-    return this.cartForm.get('creditCart');
-  }
-
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly cartService: CartService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.cartItems = this.cartService.getCartItem();
-    this.getTotalPayment();
-  }
-
-  onQuantityChange(event: any, itemId: number) {
-    console.log(event, itemId);
-
+  onQuantityChange(event: any, itemId: number): void {
     this.cartItems.forEach((item, index) => {
       if (item.id === itemId) {
-        this.cartItems[index].quantity = event.target.value;
+        this.cartItems[index].quantity = +event.target.value;
       }
     });
-    this.getTotalPayment();
+    this.calculateTotal();
   }
 
-  onCreditCartChange(creditNumber: string) {
+  onCreditCartChange(creditNumber: string): void {
     this.creditCartNumber = creditNumber;
   }
 
-  getTotalPayment2(id: number, quantity: number) {
-    this.total = 0;
-    this.cartItems.forEach(item => {
-      if (item.id === id) {
-        this.total += item.price * quantity;
-      } else {
-        this.total += item.price * item.quantity;
-      }
-    });
-  }
-
-  getTotalPayment() {
-    this.total = 0;
-    this.cartItems.forEach(item => {
-      this.total += item.price * item.quantity;
-    });
+  calculateTotal(): void {
+    this.total = this.cartItems.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
     this.total = Number(this.total.toFixed(2));
   }
 
-  onRemove(item: CartItem) {
+  onRemove(item: CartItem): void {
     this.cartService.removeItemFromCart(item.id);
-    this.getTotalPayment();
-    window.alert(`${item.name} successfully removed from cart`);
+    this.calculateTotal();
+    window.alert(`${item.name} has been removed from your cart`);
   }
 
-  onSubmit(event: Event) {
+  onSubmit(event: Event): void {
     event.preventDefault();
     this.isClickSubmit = true;
     if (this.cartForm.valid) {
