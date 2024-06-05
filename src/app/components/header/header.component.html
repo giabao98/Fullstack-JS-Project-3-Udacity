@@ -1,0 +1,13 @@
+<div id="header-wrapper">
+  <div id="header-title"><h1>My Store</h1></div>
+  <div id="nav-bar">
+    <ul>
+      <li><a routerLink="">Product List</a></li>
+      <li id="navbar-separate">|</li>
+      <li>
+        <a routerLink="cart">Cart </a>
+      </li>
+      <p *ngIf="cartItemNumber" class="item-number">{{ cartItemNumber }}</p>
+    </ul>
+  </div>
+</div>

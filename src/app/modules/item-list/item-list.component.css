@@ -1,0 +1,11 @@
+.item-list-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.item-list-index {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 80%;
+}

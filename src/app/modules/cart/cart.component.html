@@ -1,0 +1,87 @@
+<section class="cart-wrap">
+  <div *ngIf="cartItems.length" class="cart-detail">
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <img src="{{ item.url }}" alt="" />
+      <div class="cart-item-detail">
+        <h1>{{ item.name }}</h1>
+        <p>${{ item.price }}</p>
+        <div class="cart-item-text">
+          <label>Amount: </label>
+          <input
+            (input)="onQuantityChange($event, item.id)"
+            type="number"
+            min="1"
+            value="{{ item.quantity }}"
+          />
+        </div>
+        <button (click)="onRemove(item)" class="button-remove">
+          Remove item
+        </button>
+      </div>
+    </div>
+    <p class="cart-total">Total: ${{ total }}</p>
+  </div>
+  <div *ngIf="!cartItems.length">
+    Cart is empty. Please add any product to the cart :D
+  </div>
+  <div *ngIf="cartItems.length" class="customer-info">
+    <form [formGroup]="cartForm">
+      <p>Full Name</p>
+      <input
+        formControlName="fullName"
+        type="text"
+        placeholder="(minimum 3 characters)"
+      />
+      <div
+        class="input-error"
+        *ngIf="fullName?.errors?.['required'] && isClickSubmit"
+      >
+        Fullname is required
+      </div>
+      <div
+        class="input-error"
+        *ngIf="fullName?.errors?.['minlength'] && isClickSubmit"
+      >
+        Please enter at least 3 characters long
+      </div>
+      <p>Address</p>
+      <input
+        formControlName="address"
+        type="text"
+        placeholder="(minimum 6 characters)"
+      />
+      <div
+        class="input-error"
+        *ngIf="address?.errors?.['required'] && isClickSubmit"
+      >
+        Address is required
+      </div>
+      <div
+        class="input-error"
+        *ngIf="address?.errors?.['minlength'] && isClickSubmit"
+      >
+        Please enter at least 6 characters long
+      </div>
+    </form>
+    <p>Credit card number</p>
+    <input
+      [ngModel]="creditCartNumber"
+      (ngModelChange)="onCreditCartChange($event)"
+      type="text"
+      placeholder="(16-digits number)"
+    />
+    <div
+      class="input-error"
+      *ngIf="
+        (creditCartNumber.length < 16 || creditCartNumber.length > 16) &&
+        isClickSubmit
+      "
+    >
+      Please enter 16 digits number
+    </div>
+    <p class="caution">
+      We'll never share your payment details with anyone else
+    </p>
+    <button (click)="onSubmit($event)" class="button-submit">Submit</button>
+  </div>
+</section>

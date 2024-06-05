@@ -1,0 +1,7 @@
+<section class="item-list-wrap">
+  <div class="item-list-index">
+    <ng-container *ngFor="let item of itemList">
+      <app-item (addToCartEvent)="getAddedItem($event)" [item]="item"></app-item
+    ></ng-container>
+  </div>
+</section>
