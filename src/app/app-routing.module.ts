@@ -23,6 +23,7 @@ const routes: Routes = [
     path: NAVIGATES.CONFIRM,
     component: ConfirmComponent,
   },
+  { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({

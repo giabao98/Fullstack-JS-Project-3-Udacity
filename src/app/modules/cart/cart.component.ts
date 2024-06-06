@@ -16,7 +16,6 @@ export class CartComponent implements OnInit {
   private storeSubscription!: Subscription;
   public cartItems: CartItem[] = [];
   public total: number = 0;
-  public creditCartNumber: string = '';
   public isClickSubmit: boolean = false;
 
   public cartForm = new FormGroup({
@@ -27,6 +26,12 @@ export class CartComponent implements OnInit {
     address: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
+    ]),
+    creditCartNumber: new FormControl('', [
+      Validators.required,
+      Validators.minLength(16),
+      Validators.maxLength(16),
+      Validators.pattern('^-?\\d+$'),
     ]),
   });
 
@@ -49,6 +54,10 @@ export class CartComponent implements OnInit {
     return this.cartForm.get('address');
   }
 
+  get creditCartNumber() {
+    return this.cartForm.get('creditCartNumber');
+  }
+
   onQuantityChange(event: any, itemId: number): void {
     this.cartItems.forEach((item, index) => {
       if (item.id === itemId) {
@@ -56,10 +65,6 @@ export class CartComponent implements OnInit {
       }
     });
     this.calculateTotal();
-  }
-
-  onCreditCartChange(creditNumber: string): void {
-    this.creditCartNumber = creditNumber;
   }
 
   calculateTotal(): void {
